@@ -83,11 +83,11 @@ function makeProxyPromise(fn, fnName) {
 }
 
 function extendClientWithEdamClient(Client, EDAMClient) {
-  for (let key in EDAMClient.prototype) {
-    if (typeof EDAMClient.prototype[key] === 'function') {
+  Object.getOwnPropertyNames(EDAMClient.prototype).forEach(key => {
+    if (key !== 'constructor' && typeof EDAMClient.prototype[key] === 'function') {
       Client.prototype[key] = makeProxyPromise(EDAMClient.prototype[key], key);
     }
-  }
+  });
 }
 
 function getAdditionalHeaders(token) {
